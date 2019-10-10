@@ -16,6 +16,6 @@
 
 后缀：
 
-    *.nb* Mathematica文件
+    *.nb  Mathematica文件
 
-    *.m* Matlab文件
+    *.m   Matlab文件
