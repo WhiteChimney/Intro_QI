@@ -19,3 +19,5 @@
     *.nb  Mathematica文件
 
     *.m   Matlab文件
+
+注：States_on_Bloch_sphere.m 可显示任意态在半波片/四分之一波片作用下在Bloch球上的轨迹。
