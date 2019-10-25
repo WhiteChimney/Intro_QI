@@ -1,31 +1,29 @@
-% ´ËÎÄ¼ş¿ÉÏÔÊ¾HWPÓëQWP×÷ÓÃÔÚÁ¿×ÓÌ¬ÉÏºóÔÚBlochÇòÉÏµÄ¹ì¼£
-% ÆäÖĞ°×µãÎª³õÌ¬£¬ºÚµãÎªx,y,zÖáÕıÏò²¿·ÖÓëBlochÇòµÄ½»µã
-% ÆäÓàµãÎªÄ©Ì¬Ëæ²¨Æ¬½Ç¶È±ä»¯¶øĞÎ³ÉµÄ¹ì¼£
-% ×¢£ºÈıÎ¬Í¼¿ÉÒÔÍÏ¶¯²é¿´²»Í¬ÊÓ½Ç
+% æ­¤æ–‡ä»¶å¯æ˜¾ç¤ºHWPä¸QWPä½œç”¨åœ¨é‡å­æ€ä¸Šååœ¨Blochçƒä¸Šçš„è½¨è¿¹
+% å…¶ä¸­ç™½ç‚¹ä¸ºåˆæ€ï¼Œé»‘ç‚¹ä¸ºx,y,zè½´æ­£å‘éƒ¨åˆ†ä¸Blochçƒçš„äº¤ç‚¹
+% å…¶ä½™ç‚¹ä¸ºæœ«æ€éšæ³¢ç‰‡è§’åº¦å˜åŒ–è€Œå½¢æˆçš„è½¨è¿¹
+% æ³¨ï¼šä¸‰ç»´å›¾å¯ä»¥æ‹–åŠ¨æŸ¥çœ‹ä¸åŒè§†è§’
 
-%% Ô¤Éè²ÎÊı
-C1 = 1; C2 = 0; phi_0 = pi*0/4;   % Ä©Ì¬±íÊ¾Îª C1|0> + C2*exp(i*phi_0)|1>
-alpha = 0:pi/1000:pi*16/16;         % ²¨Æ¬½Ç¶È£¬ÆğÊ¼£º²½¾à£¨¾«¶È£©£º½áÊø
-HWPorQWP = 1;                       % Ñ¡Ôñ²¨Æ¬£¬0ÎªHWP£¬1ÎªQWP
+%% é¢„è®¾å‚æ•°
+C1 = 1; C2 = 0; phi_0 = pi*0/4;   % æœ«æ€è¡¨ç¤ºä¸º C1|0> + C2*exp(i*phi_0)|1>
+alpha = 0:pi/1000:pi*16/16;         % æ³¢ç‰‡è§’åº¦ï¼Œèµ·å§‹ï¼šæ­¥è·ï¼ˆç²¾åº¦ï¼‰ï¼šç»“æŸ
+HWPorQWP = 1;                       % é€‰æ‹©æ³¢ç‰‡ï¼Œ0ä¸ºHWPï¼Œ1ä¸ºQWP
 
-%% ¼ÆËãÄ©Ì¬¼°¶ÔÓ¦BlochÇòÉÏµÄ×ø±ê
-% ¶¨ÒåHWPÓëQWPº¯Êı¼°ÆäÄæ
+%% è®¡ç®—æœ«æ€åŠå¯¹åº”Blochçƒä¸Šçš„åæ ‡
+% å®šä¹‰HWPä¸QWPå‡½æ•°åŠå…¶é€†
 HWP =@(theta) [cos(2*theta),  sin(2*theta);...
                sin(2*theta), -cos(2*theta)];
 QWP =@(theta) [cos(2*theta)-1i,   -sin(2*theta);...
                   sin(2*theta), cos(2*theta)+1i];
-HWP_r =@(theta) [cos(2*theta),  sin(2*theta);...
-                 sin(2*theta), -cos(2*theta)];
-QWP_r =@(theta) 0.5*[cos(2*theta)+1i,    sin(2*theta);...
-                       -sin(2*theta), cos(2*theta)-1i];
+HWP_r =@(theta) HWP(theta);
+QWP_r =@(theta) 0.5*QWP(theta)';
 
-% ÈëÉäÌ¬
+% å…¥å°„æ€
 psi_0 = [C1; C2*exp(1i*phi_0)];
 psi_0 = RealUp(psi_0);
 
-% Çó¾­²¨Æ¬ºóµÄÌ¬ÔÚBlochÇòÉÏËù¶ÔÓ¦µÄ×ø±ê
-xyz_0 = BlochCoord(psi_0);             % ³õÊ¼Ì¬×ø±ê
-xyz_x = zeros(length(alpha),3);        % Ä©Ì¬×ø±ê
+% æ±‚ç»æ³¢ç‰‡åçš„æ€åœ¨Blochçƒä¸Šæ‰€å¯¹åº”çš„åæ ‡
+xyz_0 = BlochCoord(psi_0);             % åˆå§‹æ€åæ ‡
+xyz_x = zeros(length(alpha),3);        % æœ«æ€åæ ‡
 for i = 1:length(alpha)
     if HWPorQWP == 0
         psi_x = HWP(alpha(i)) * psi_0;
@@ -36,31 +34,35 @@ for i = 1:length(alpha)
     xyz_x(i,:) = BlochCoord(psi_x);
 end
 
-% »­Í¼
+% ç”»å›¾
 hold on
-[sx,sy,sz] = sphere;                             % BlochÇò
+[sx,sy,sz] = sphere;                             % Blochçƒ
 surf(sx,sy,sz,'FaceAlpha',0.5)
 shading interp
-text(xyz_0(1),xyz_0(2),xyz_0(3),'o','color','w') % °×µãÎª³õÌ¬
-text(1,0,0,'o','color','k')                      % ºÚµãÎªx,y,z×ø±êÖáÕıÏò
+text(xyz_0(1),xyz_0(2),xyz_0(3),'o','color','w') % ç™½ç‚¹ä¸ºåˆæ€
+text(1,0,0,'o','color','k')                      % é»‘ç‚¹ä¸ºx,y,zåæ ‡è½´æ­£å‘
 text(0,1,0,'o','color','k')
 text(0,0,1,'o','color','k')
-scatter3(xyz_x(:,1),xyz_x(:,2),xyz_x(:,3),'.')   % »­³öÄ©Ì¬Ëæ²¨Æ¬½Ç¶È±ä»¯µÄ¹ì¼£
+scatter3(xyz_x(:,1),xyz_x(:,2),xyz_x(:,3),'.')   % ç”»å‡ºæœ«æ€éšæ³¢ç‰‡è§’åº¦å˜åŒ–çš„è½¨è¿¹
 hold off
 
 
-%% ×Óº¯Êı
+%% å­å‡½æ•°
 
 function res = RealUp(psi)
-% ½«ÊäÈëµÄÌ¬Õı¹æ»¯£¬¼´¹éÒ»ÇÒµÚÒ»¸öÏµÊıÎªÊµÊı
+% å°†è¾“å…¥çš„æ€æ­£è§„åŒ–ï¼Œå³å½’ä¸€ä¸”ç¬¬ä¸€ä¸ªç³»æ•°ä¸ºå®æ•°
     res = [psi(1)*conj(psi(1)); psi(2)*conj(psi(1))];
     res = res/norm(res);
 end
 
 function xyz = BlochCoord(psi)
-% ÊäÈëÒ»¸öÌ¬£¬·µ»ØÆäÔÚBlochÇòÉÏµÄÖ±½Ç×ø±ê
-    rela_amp = psi(2)/psi(1);
-    theta = 2*atan(abs(rela_amp));
-    phi = mod(imag(log(rela_amp/abs(rela_amp))),2*pi);
-    xyz = [sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)];
+% è¾“å…¥ä¸€ä¸ªæ€ï¼Œè¿”å›å…¶åœ¨Blochçƒä¸Šçš„ç›´è§’åæ ‡
+    % PauliçŸ©é˜µ
+    pauli_x = [0,1;1,0];
+    pauli_y = [0,-1i;1i,0];
+    pauli_z = [1,0;0,-1];
+    % åæ ‡å¯¹åº”å…¬å¼
+    xyz = [psi'*pauli_x*psi;...
+           psi'*pauli_y*psi;...
+           psi'*pauli_z*psi];
 end
